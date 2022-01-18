@@ -1,5 +1,6 @@
 FROM mcr.microsoft.com/windows/servercore:ltsc2019
 LABEL Name=PowerBI Version=0.1.14 maintainer="John Hall"
+LABEL Name=TrigerBuild
 # Download Link:
 ENV SQL "https://go.microsoft.com/fwlink/?linkid=866662"
 ENV sa_password="_" \
