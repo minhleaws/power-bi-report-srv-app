@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "pbirs.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "pbirs.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "pbirs.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "pbirs.selectorLabels" . | nindent 8 }}
+    spec:
+    {{- if .Values.nodeSelector }}
+      nodeSelector: {{ toYaml .Values.nodeSelector | nindent 8 }}
+    {{- end }}
+      {{- if .Values.imagePullSecrets }}
+      imagePullSecrets:
+      - name: {{ .Values.imagePullSecrets }}
+      {{- end }}
+      containers:
+      - name: pbirs
+        image: {{ .Values.image.repository }}:{{ .Values.image.tag | default "latest" }}
+        ports:
+        - name: http
+          containerPort: 80
+        - name: mssql
+          containerPort: 1433
+        resources: {{ toYaml .Values.resources | nindent 12 }} 
+        env:
+        - name: ACCEPT_EULA
+          value: "Y"        
+        - name: sa_password
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "pbirs.fullname" . }}
+              key: sa_password
+        - name: pbirs_user
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "pbirs.fullname" . }}
+              key: pbirs_user
+        - name: pbirs_password
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "pbirs.fullname" . }}
+              key: pbirs_password

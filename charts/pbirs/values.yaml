@@ -1,0 +1,31 @@
+replicaCount: 1
+
+image:
+  repository: powerbipoc.azurecr.io/pbirs
+  tag: ""
+  pullPolicy: IfNotPresent
+imagePullSecrets: ""
+
+nodeSelector: 
+  kubernetes.io/os: windows
+
+service:
+  type: LoadBalancer
+  portName: http
+  port: 80
+
+extraExposePorts:
+- name: mssql
+  port: 1443
+  protocol: TCP
+  targetPort: 1443
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 100Mi
+
+environments:
+  sa_password: 8W7zxMEN8yqw
+  pbirs_user: PBIAdmin
+  pbirs_password: PWrVv69ryWVR

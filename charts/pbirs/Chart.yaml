@@ -1,0 +1,8 @@
+apiVersion: v2
+name: pbirs
+description: Power Bi Reporting Services Chart
+type: application
+version: 0.1.0
+appVersion: "1.14"
+sources:
+  - https://github.com/HealisticEngineer/Docker-PowerBI
